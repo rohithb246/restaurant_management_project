@@ -1,13 +1,14 @@
 from django.db import models
-from django.utils import timezone
+from .models import OrderStatus
+ 
+class Order(models.Model):
+    status = models.ForeignKey(
+        'OrderStatus',
+        on_delete=models.SET_NULL,
+        null=True,
+        blank=True
+    )
 
-class Coupon(models,Model):
-      code = models.CharField(max_length=50, unique=True)
-      discount_percentage = models.DecimalField(max_digit= 5, decimal_places=2)
-      is_active = models.BooleanField(default=True)
-      valid_from = models.DateField()
-      valid_until = models.DateField()
-
-      def _str_(self):
-        return self.code
+    def _str_(self):
+        return f"Order #{self.id}"
         
