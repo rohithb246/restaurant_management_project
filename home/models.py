@@ -12,5 +12,13 @@ class MenuItem(models.Model):
 
     is_featured = models.BooleanField(default=false)
 
-    def _str_(self):
+
+class Restaurant(models,Model):
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+    phone = models.CharField(max_length=20)
+
+    has_delivery = models.BooleanField(default=False)
+
+def _str_(self):
         return self.name
