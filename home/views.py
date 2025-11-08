@@ -6,6 +6,7 @@ from django.db.models import Q
 from rest_framework import generics
 from .models import MenuItem
 from .serializers import MenuItemSerializer
+from .serializers import IngredientSerializer
 
 # List and Create API for all items
 class MenuCategoryListView(ListAPIView):
@@ -41,3 +42,14 @@ class MenuItemSearchViewSet(viewsets.ViewSet):
             return Response(serializer.data, status=status.HTTP_200_OK)
         
         return Response(serializer.error, status=status.HTTP_400_BAD_RESPONSE)
+
+class MenuItemIngredientsView(RetrieveAPIView):
+    def get(self, request, pk):
+        try:
+            menu_item = MenuItem.objects.get(pk=pk)
+        except MenuItem.DoesNotExist:
+            return Response({"error":"menu items not found"}, status=status.HTTP_404_NOT_FOUND)
+
+            Ingredients = menu_item.ingredients.all()
+            serializer = IngredientSerializer(ingredients, many=True)
+            return Response(serializer.data, status=status.HTTP_200_OK)
