@@ -2,6 +2,7 @@ from datetime import datetime
 from .models import DailyOperatingHours
 from orders.utils import calculate_tip_amount
 from datetime import datetime,time
+import re
 
 def get_today_operating_hours():
     current_day = datetime.today().strftime('%A')
@@ -27,3 +28,8 @@ def is_restaurant_open():
 
 calculate_tip_amount(100,15)
 calculate_tip_amount(250.75,10)
+
+def is_valid_Phone_number(phone_number: str) -> bool:
+    pattern = r"^\+?\d[\d\s-]{8,14}\d$"
+
+    return bool(re.match(pattern, phone_number))
