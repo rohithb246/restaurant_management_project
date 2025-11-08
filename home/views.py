@@ -26,3 +26,18 @@ class MenuItemSearchViewSet(ViewSet):
         result_page = pagination.paginate_queryset(queryset, request)
         serializer = MenuItemSerializer(result_page, many=true)
         return paginator.get_paginated_response(serializer.data)
+
+class MenuItemSearchViewSet(viewsets.ViewSet):
+    def update(self, request, pk=None):
+        try:
+            menu_item = MenuItem.objects.get(pk=pk)
+        except MenuItem.DoesNotExist:
+            return Response({"error":"Menu items not found"}, status=status.HTTP_404_NOT_FOUND)
+        
+        serializer = MenuItemSerializer(menu_item, data=request.data, partial=True)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(serializer.data, status=status.HTTP_200_OK)
+        
+        return Response(serializer.error, status=status.HTTP_400_BAD_RESPONSE)
