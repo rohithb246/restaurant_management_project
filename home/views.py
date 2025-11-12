@@ -7,6 +7,8 @@ from rest_framework import generics
 from .models import MenuItem
 from .serializers import MenuItemSerializer
 from .serializers import IngredientSerializer
+from.models import Table
+from.serializers import TableSerializer
 
 # List and Create API for all items
 class MenuCategoryListView(ListAPIView):
@@ -53,3 +55,7 @@ class MenuItemIngredientsView(RetrieveAPIView):
             Ingredients = menu_item.ingredients.all()
             serializer = IngredientSerializer(ingredients, many=True)
             return Response(serializer.data, status=status.HTTP_200_OK)
+
+class TableDetailView(generics.RetrieveAPIView):
+    queryset = Table.objects.all()
+    serializer_class = TableSerializer
