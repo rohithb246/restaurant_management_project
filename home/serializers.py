@@ -3,6 +3,7 @@ from .models import MenuItem
 from .models import Ingredient
 from .models import Table
 from django.db import models
+from .models import MenuItem
 
 class MenuIteSerializer(serializers.modelSerializer):
     class Meta:
