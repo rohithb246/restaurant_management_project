@@ -2,6 +2,7 @@ from rest_framework import serializers
 from .models import MenuItem
 from .models import Ingredient
 from .models import Table
+from django.db import models
 
 class MenuIteSerializer(serializers.modelSerializer):
     class Meta:
