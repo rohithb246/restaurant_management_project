@@ -59,3 +59,9 @@ class MenuItemIngredientsView(RetrieveAPIView):
 class TableDetailView(generics.RetrieveAPIView):
     queryset = Table.objects.all()
     serializer_class = TableSerializer
+
+class AvailableTablesAPIView(APIView):
+    def get(self, request):
+        available_tables = Table.objects.filter(is_available=True)
+        serializer = TableSerializer(available_tables, many=True)
+        return Response(serializer.data)
