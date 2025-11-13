@@ -17,4 +17,8 @@ class Order(models.Model):
 
     def _str_(self):
         return f"Order #{self.id} - {self.status.name if self.status else 'No status'}"
+
+    def get_unique_item_names(self):
+        items_names = {item.menu_item.name for item in self.orderitem_set.all()}
+        return list(item_names)
         
