@@ -22,3 +22,7 @@ class Order(models.Model):
         items_names = {item.menu_item.name for item in self.orderitem_set.all()}
         return list(item_names)
         
+class ActiveOrderManager(models.Manager):
+    def get_active_orders(self):
+        return self.filter(status__in=['pending', 'processing'])
+        
