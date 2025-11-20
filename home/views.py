@@ -9,6 +9,10 @@ from .serializers import MenuItemSerializer
 from .serializers import IngredientSerializer
 from.models import Table
 from.serializers import TableSerializer
+from rest_framework.generics import CreateAPIView
+from .models import ContactFormSubmission
+from .serializers import ContactFormSubmissionSerializer
+
 
 # List and Create API for all items
 class MenuCategoryListView(ListAPIView):
@@ -65,3 +69,22 @@ class AvailableTablesAPIView(APIView):
         available_tables = Table.objects.filter(is_available=True)
         serializer = TableSerializer(available_tables, many=True)
         return Response(serializer.data)
+
+class ContactFormSubmissionView(CreateAPIView):
+    queryset = ContactFormSubmission.objects.all()
+    serializer_class = ContactFormSubmissionSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+
+        if serializer.is_valid():
+            serializer.save()
+            return Response(
+                {"message": "You message has been submitted successfully."},
+                status=status.HTTP_201_CREATED
+            )
+
+            return Response(
+                {"errors": serializer.errors},
+                status=status.HTTP_400_BAD_RESPONSE
+            )
