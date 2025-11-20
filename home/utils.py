@@ -3,7 +3,35 @@ from .models import DailyOperatingHours
 from orders.utils import calculate_tip_amount
 from datetime import datetime,time
 import re
+from django.core.mail import send_mail, BadHeaderError
+from django.conf import settings
+from django.core.exceptions import ValidationError
+from django.core.validators import validate_email
 
+def send_custom_email(recipient_email, subject, message):
+    try:
+        validate_email(recipient_email)
+        send_mail(
+            subjects=subject,
+            message=message,
+            from_email=settings.DEFAULT_FROM_EMAIL,
+            recipient_list=[recipient_email],
+            failed_silently=False,
+        )
+        return True
+
+        except ValidationError:
+            print("invalid email address:", recipient_email)
+            return False
+
+        except BadHeaderError:
+            print("invalid header found")
+            return False
+
+        except Exception as e:
+            print("error sending email:", str(e))
+            return False
+            
 def get_today_operating_hours():
     current_day = datetime.today().strftime('%A')
 
