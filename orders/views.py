@@ -2,6 +2,7 @@ from django.shortcuts import render
 from rest_framework.generics import RetrieveAPIView
 from .models import Order
 from .serializers import OrderSerializer
+from .serializers import PaymentMethodSerializer
 
 class OrderDetailAPIView(RetrieveAPIView):
     queryset = Order.objects.all()
@@ -31,3 +32,9 @@ class OrderDetailAPIView(RetrieveAPIView):
             {"message": "Order successfully cancelled."},
             status=status,HTTP_200_OK
         )
+
+class PaymentMethodListView(ListAPIView):
+    serializer_class = PaymentMethodSerializer
+
+    def get_queryset(self):
+        return PaymentMethod.objects.filter(is_active=True)
