@@ -5,6 +5,22 @@ from account.models import Customer
 from home.models import MenuItem
 from .utils import generate_unique_order_id
 
+class OrderManager(models.Manager):
+    def with_status(self, status):
+        return self.filter(status=status)
+        
+    def pending(self):
+        return self.with_status('pending')
+    
+    def processing(self):
+        return self.with_status('processing')
+    
+    def completed(self):
+        return self.with_status('completed')
+    
+    def cancelled(self):
+        return self.with_status('cancelled')
+
 class OrderStatus(models.Model):
     name = models.charField(max_length=50)
 
@@ -36,6 +52,7 @@ class Order(models.Model):
         null=True,
         blank=True
     )
+    objects = OrderManager()
 
 
     def _str_(self):
@@ -76,4 +93,5 @@ class order(model.Model):
 
     def __str__(self):
         return self.order_id
+
         
