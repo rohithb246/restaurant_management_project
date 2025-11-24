@@ -25,6 +25,7 @@ class PaymentMethod(models.Model):
         return self.name
 
 class OrderstatusUpdateSerializer(serializers.Serializer):
+    order_id = serializers.IntegerField()
     status = serializers.ChoiceField(choice=[c[0] for c in Order.STATUS_CHOICES])
 
     def update(self, instance, validated_data):
