@@ -7,6 +7,15 @@ from django.core.mail import send_mail, BadHeaderError
 from django.conf import settings
 from django.core.exceptions import ValidationError
 from django.core.validators import validate_email
+from home.models import MenuItem, Cuisine
+
+def get_distinct_cuisines():
+    cuisines = (
+        MenuItem.objects
+        .values_list('cuisine_name', flat=True)
+        .distinct()
+    )
+    return list(cuisines)
 
 def send_custom_email(recipient_email, subject, message):
     try:
