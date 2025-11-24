@@ -23,3 +23,11 @@ class PaymentMethod(models.Model):
 
     def __str__(self):
         return self.name
+
+class OrderstatusUpdateSerializer(serializers.Serializer):
+    status = serializers.ChoiceField(choice=[c[0] for c in Order.STATUS_CHOICES])
+
+    def update(self, instance, validated_data):
+        instance.status = validated_data['status']
+        instance.save()
+        return instance
