@@ -19,6 +19,11 @@ class MenuCategoryListView(ListAPIView):
     queryset = MenuCategory.objects.all()
     serializer_class = MenuCategorySerializer
 
+class MenuCategoryViewSet(viewsets.ModelViewSet):
+    queryset = MenuCategory.objects.all()
+    serializer_class = MenuCategorySerializer
+    permission_classes = [IsAuthenicatedOrReadOnly]
+
 class MenuItemSearchViewSet(ViewSet):
     pagination_class = MenuItemSearchPagination
 
