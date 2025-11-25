@@ -12,7 +12,13 @@ from.serializers import TableSerializer
 from rest_framework.generics import CreateAPIView
 from .models import ContactFormSubmission
 from .serializers import ContactFormSubmissionSerializer
+from .serializers import DailySpecialSerializer
 
+class DailySpecialSerializer(generics.ListAPIView):
+    serializer_class = DailySpecialSerializer
+
+    def get_queryset(self):
+        return MenuItem.objects.filter(is_daily_special=True)
 
 # List and Create API for all items
 class MenuCategoryListView(ListAPIView):
@@ -36,7 +42,7 @@ class MenuItemSearchViewSet(ViewSet):
 
         pagination = self.pagination_class()
         result_page = pagination.paginate_queryset(queryset, request)
-        serializer = MenuItemSerializer(result_page, many=true)
+        serializer = MenuItemSerializer(result_page, many=True)
         return paginator.get_paginated_response(serializer.data)
 
 class MenuItemSearchViewSet(viewsets.ViewSet):
