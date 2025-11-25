@@ -4,6 +4,22 @@ from decimal import Decimal
 from account.models import Customer
 from home.models import MenuItem
 from .utils import generate_unique_order_id
+from .utils import calculate_discount
+
+class Order(models.Model):
+    def calculate_total(self):
+        total = Decimal('0.00')
+
+        for item in self.items.all():
+            price = item.unit_price if hasattr(item, 'unit_price') else item.menu_item.price
+            quantity = item.quantity or 1
+
+            line_total = Decimal(price) * quantity
+            discount = Decimal(calculate_discount(item))
+
+            total += max(Decimal('0.00'), line_total - discount)
+
+        return total.quantize(Decimal('0.001'))
 
 class OrderManager(models.Manager):
     def with_status(self, status):
@@ -43,6 +59,7 @@ class Order(models.Model):
     STATUS_CHOICES = [
         ('Pending', 'Pending'),
         ('Processing','Processing'),
+        ('Delivered', 'Delivered')
         ('Cancelled','Cancelled'),
         ('Completed','Completed')
     ]
