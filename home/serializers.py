@@ -6,6 +6,11 @@ from django.db import models
 from .models import MenuItem
 from .models import MenuCategory
 
+class DailySpecialSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuItem
+        field = ['id', 'name', 'price', 'description']
+        
 class MenuIteSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
