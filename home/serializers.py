@@ -4,12 +4,18 @@ from .models import Ingredient
 from .models import Table
 from django.db import models
 from .models import MenuItem
+from .models import MenuCategory
 
 class MenuIteSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'name','description', 'price' ]
-
+class MenuCategorySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuCategory
+        fields = ['id','name']
+        read_only_fields = ['id']
+        
 class IngredientSerializer(serializers.ModelSerializer):
     class Meta:
         model = Ingredient
