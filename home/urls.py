@@ -6,7 +6,7 @@ from .views import AvailableTablesAPIView
 from .views import ContactFormSubmission
 from rest_framework.routers import DefaultRouter
 from .views import MenuCategoryViewSet
-from .views import DailySpecialsView
+from .views import DailySpecialView
 
 router = DefaultRouter()
 router.register(r'menu-categories', MenuCategoryViewSet, basename='menucategory')
@@ -36,5 +36,5 @@ urlpatterns = [
 ]
 
 urlpatterns = [
-    path('daily-specials/', DailySpecialsView.as_view(), name='daily-specials')
+    path('daily-specials/', DailySpecialView.as_view(), name='daily-specials')
 ]
