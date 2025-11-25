@@ -4,6 +4,15 @@ from .views import MenuItemSearchSet
 from .views import MenuItemIngredientsView
 from .views import AvailableTablesAPIView
 from .views import ContactFormSubmission
+from rest_framework.routers import DefaultRouter
+from .views import MenuCategoryViewSet
+
+router = DefaultRouter()
+router.register(r'menu-categories', MenuCategoryViewSet, basename='menucategory')
+
+urlpatterns = [
+    path('',include(router.urls)),
+]
 
 urlpatterns = [
     path('menu-items/search/', MenuItemSearchSet.as_view({'get':'list'}),name='menu-items-search'),
