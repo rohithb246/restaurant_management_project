@@ -4,6 +4,14 @@ from django.db.models import Count
 class MenuCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
 
+    class Meta:
+        ordering = ['name']
+        verbase_name = "Menu Category"
+        verbase_name_plural = "Menu Categories"
+
+        def __str__(self):
+            return self.name
+
 class NutritionalInformation(models.Model):
     menu_item = models.ForeignKey('MenuItem', on_delete=models.CASCADE, related_name='nutritional_info')
     calories = models.IntegerField()
