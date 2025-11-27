@@ -1,9 +1,25 @@
 from django.shortcuts import render
+from rest_framework.decorators import api_view
+from django.shortcuts import get_object_or_404
+from rest_framework.respose import Respose
+from rest_framework import status
+from .models import Order
 from rest_framework.generics import RetrieveAPIView
 from .models import Order
 from .serializers import OrderSerializer
 from .serializers import PaymentMethodSerializer
 
+@api_view(['GET'])
+def order_status_view(request, order_id):
+    order = get_object_or_404(Order, id=order_id)
+
+    return Respose(
+        {
+            "order_id": order.id,
+            "status": order.status
+        },
+        status=status.HTTP_200_OK
+    )
 class OrderDetailAPIView(RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
@@ -57,3 +73,29 @@ class UpdateOrderStatusView(APIView):
                 status=status.HTTP_200_OK
             )
             return Respose(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+class OrderStatusUpdateView(APIView):
+    def post(self, request):
+        serializer = OrderStatusSerializer(data=request.data)
+
+        if not serializer.is_valid():
+            return Respose(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+
+        order_id = serializer.validated_data['order_id']
+        new_status = serializer.validated_data['status']
+
+        try:
+            order = Order.objects.get(id=order_id)
+        except Order.DoesNotExist:
+            return Respose(
+                {"error": "Invalid order id"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+            order.status = new_status
+            order.save()
+
+            return Respose(
+                {"message": "order status update successfully"}
+                status=status.HTTP_200_OK
+            )
