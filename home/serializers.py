@@ -18,7 +18,7 @@ class MenuIteSerializer(serializers.ModelSerializer):
 class MenuCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuCategory
-        fields = ['id','name']
+        fields = "__all__"
         read_only_fields = ['id']
         
 class IngredientSerializer(serializers.ModelSerializer):
