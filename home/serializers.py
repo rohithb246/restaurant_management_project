@@ -5,6 +5,18 @@ from .models import Table
 from django.db import models
 from .models import MenuItem
 from .models import MenuCategory
+from .models import UserReview
+
+class UserReviewSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UserReview
+        field = "__all__"
+        read_only_fields = ["user", "review_date"]
+
+    def validate_rating(self, value):
+        if value < 1 or value > 5:
+            raise serializers.ValidationError("Rating must be between 1 and 5")
+        return value
 
 class DailySpecialSerializer(serializers.ModelSerializer):
     class Meta:
