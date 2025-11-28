@@ -13,9 +13,17 @@ class MenuItem(models.Model):
         return self.name
 
 class Reservation(models.Model):
+    name = models.CharField(max_digits=150)
+    address = models.TextField()
+    phone_number = models.CharField(max_length=20)
+    opening_hours = models.CharField(max_length=200)
+    description = models.TextField(blank=True, null=True)
     customer_name = models.CharField(max_length=200)
     Reservation_time = models.DateTimeField()
     duration = models.DurationField(default=timedelta(hours=1))
+    
+    def __str__(self):
+    return self.name
 
     @classmethod
     def find_available_slots(cls, start, end, slot_duration=timedelta(hours=1)):
