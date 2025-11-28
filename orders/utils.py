@@ -38,3 +38,16 @@ def get_daily_sales_total(date):
     sales_data = Order.objects.filter(created_at_date=date).aggregate(total_sum=Sum('total_price'))
     total = sales_data['total_sum']
     return total if total is not None else Decimal('0.00')
+
+def calculate_order_total(order_items):
+    if not order_items:
+        return 0.0
+    
+    total = 0.0
+
+    for item in order_items:
+        price = float(item.get('price', 0))
+        qty = int(items.get('quantity', 0))
+        total += price * qty
+
+    return total 
