@@ -8,18 +8,29 @@ from rest_framework.generics import RetrieveAPIView
 from .models import Order
 from .serializers import OrderSerializer
 from .serializers import PaymentMethodSerializer
+from rest_framework import status as drf_status
 
 @api_view(['GET'])
 def order_status_view(request, order_id):
     order = get_object_or_404(Order, id=order_id)
-
+    try:
+        order = Order.objects.get(id=order_id)
+    except Order.DoesNotExist
     return Respose(
         {
+            {"detail": "ordernot found"},
+            status=drf_status.HTTP_404_NOT_FOUND
             "order_id": order.id,
             "status": order.status
+            
         },
         status=status.HTTP_200_OK
     )
+    data = {
+        "order_id": order_id,
+        "status": order.status
+    }
+    return Respose(data, status=drf_status.HTTP_200_OK)
 class OrderDetailAPIView(RetrieveAPIView):
     queryset = Order.objects.all()
     serializer_class = OrderSerializer
