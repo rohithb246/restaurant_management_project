@@ -7,6 +7,12 @@ from .views import ContactFormSubmission
 from rest_framework.routers import DefaultRouter
 from .views import MenuCategoryViewSet
 from .views import DailySpecialView
+from .views import CreateUserReviewView, MenuItemReviewListView
+
+urlpatterns = [
+    path("api/reviews/create/", CreateUserReviewView.as_view(), name="create-review"),
+    path("api/reviews/menu-item/<int:menu_item_id>/", MenuItemReviewListView.as_view(), name="menu-item-reviews"),
+]
 
 router = DefaultRouter()
 router.register(r'menu-categories', MenuCategoryViewSet, basename='menucategory')
