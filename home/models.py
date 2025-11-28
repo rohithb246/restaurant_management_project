@@ -1,6 +1,30 @@
 from django.db import models
 from django.contrib.auth.models import User
 from .models import MenuItem
+from django.db import models
+from datetime import timedelta
+
+class Reservation(models.Model):
+    customer_name = models.CharField(max_length=200)
+    Reservation_time = models.DateTimeField()
+    duration = models.DurationField(default=timedelta(hours=1))
+
+    @classmethod
+    def find_available_slots(cls, start, end, slot_duration=timedelta(hours=1)):
+        reservation = cls.objects.filter(
+            reservation_time__lt=end,
+            reservation_time__gte=start
+        )
+
+        slots = []
+        slot = start
+
+        while slot + slot_duration <= end:
+            if not reservations.filter(reservation_time__range=(slot, slot_duration)).exists():
+                slots.append(slot)
+            slot += slot_duration
+
+        return slots
 
 class UserReview(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
