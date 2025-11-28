@@ -15,7 +15,17 @@ class UserReview(models.Model):
 
         def __str__(self):
             return f"{self.user.username} - {self.menu_item.name} ({self.rating}/5)"
+class LoyaltyProgram(models.Model):
+    name = models.CharField(max_length=100, unique=True)
+    points_per_dollar_spent = models.DecimalField(max_digits=5, decimal_places=2)
+    description = models.TextField(blank=True, null=True)
+    is_active = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    updated_at = models.DateTimeField(auto_now_add=True)
 
+    def __str__(self):
+        return self.name
+        
 class MenuCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
     description = models.TextField(blank=True, null=True)
