@@ -3,21 +3,14 @@ from .models import MenuItem
 from .models import Ingredient
 from .models import Table
 from django.db import models
+from .model import UserReview
 from .models import MenuItem
 from .models import MenuCategory
-from .models import UserReview
 
 class UserReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserReview
-        field = "__all__"
-        read_only_fields = ["user", "review_date"]
-
-    def validate_rating(self, value):
-        if value < 1 or value > 5:
-            raise serializers.ValidationError("Rating must be between 1 and 5")
-        return value
-
+        fiels = ['id', 'user', 'rating', 'text', 'created_at']
 class DailySpecialSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
@@ -27,10 +20,16 @@ class MenuIteSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'name','description', 'price' ]
+    
+    def validate_rating(self, value):
+        if value < 1 or value > 5:
+            raise serializers.validationError("Rating must be betweeen 1 and 5")
+        return value
+        
 class MenuCategorySerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuCategory
-        fields = "__all__"
+        fields = ['id','name']
         read_only_fields = ['id']
         
 class IngredientSerializer(serializers.ModelSerializer):
