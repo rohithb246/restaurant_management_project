@@ -1,106 +1,105 @@
 from django.db import models
-from django.contrib.auth.models import User
-from .models import MenuItem
-from django.db import models
-from datetime import timedelta
+from django.db.models import Count
 
-class MenuItem(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    is_available = models.BooleanField(default=True)
-
-    def __str__(self):
-        return self.name
-
-class Reservation(models.Model):
-    name = models.CharField(max_digits=150)
-    address = models.TextField()
-    phone_number = models.CharField(max_length=20)
-    opening_hours = models.CharField(max_length=200)
-    description = models.TextField(blank=True, null=True)
-    customer_name = models.CharField(max_length=200)
-    Reservation_time = models.DateTimeField()
-    duration = models.DurationField(default=timedelta(hours=1))
-    
-    def __str__(self):
-    return self.name
-
-    @classmethod
-    def find_available_slots(cls, start, end, slot_duration=timedelta(hours=1)):
-        reservation = cls.objects.filter(
-            reservation_time__lt=end,
-            reservation_time__gte=start
-        )
-
-        slots = []
-        slot = start
-
-        while slot + slot_duration <= end:
-            if not reservations.filter(reservation_time__range=(slot, slot_duration)).exists():
-                slots.append(slot)
-            slot += slot_duration
-
-        return slots
-
-class UserReview(models.Model):
-    user = models.ForeignKey(User, on_delete=models.CASCADE)
-    MenuItem = models.ForeignKey(MenuItem, on_delete=models.CASCADE, related_name='reviews')
-    rating = models.IntegerField()
-    comment = models.TextField(blank=True, null=True)
-    review_date = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('user', 'menu_item')
-        ordering = ['-review_date']
-
-        def __str__(self):
-            return f"{self.user.username} - {self.menu_item.name} ({self.rating}/5)"
-class LoyaltyProgram(models.Model):
-    name = models.CharField(max_length=100, unique=True)
-    points_per_dollar_spent = models.DecimalField(max_digits=5, decimal_places=2)
-    description = models.TextField(blank=True, null=True)
-    is_active = models.BooleanField(default=True)
-    created_at = models.DateTimeField(auto_now_add=True)
-    updated_at = models.DateTimeField(auto_now_add=True)
-
-    def __str__(self):
-        return self.name
-        
 class MenuCategory(models.Model):
     name = models.CharField(max_length=100, unique=True)
+
+    class Meta:
+        ordering = ['name']
+        verbase_name = "Menu Category"
+        verbase_name_plural = "Menu Categories"
+
+        def __str__(self):
+            return self.name
+
+class NutritionalInformation(models.Model):
+    menu_item = models.ForeignKey('MenuItem', on_delete=models.CASCADE, related_name='nutritional_info')
+    calories = models.IntegerField()
+    protein_grams = models.DecimalField(max_digits=5, decimal_places=2)
+    fat_grams = models.DecimalField(max_digits=5, decimal_places=2)
+    carbohydrate_grams = models.DecimalField(max_digits=5, decimal_places=2)
+
+class DailySpecialManager(models.Manager):
+    def upcoming(self):
+        today = datetime.date.today()
+        return self.filter(date__gte=today)
+
+class DailySpecial(models.Model):
+    name =  models.CharField(max_length=255)
+    description = models.TextField()
+    date = models.DateField()
+
+    objects = DailySpecialManager()
+
+class MenuItemManager(models.Manager):
+    def get_top_selling_items(self, num_items=5):
+        return (
+            self.get_queryset()
+            .annotate(total_orders=Count('orderitemss'))
+            .order_by('total_orders')[:num_items]
+        )
+
+class MenuItem(models.Model):
+    name = models.CharField(max_length=100)
     description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    is_available = models.BooleanField(default=True)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_daily_special = models.BooleanField(default=False)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
+    objects = MenuItemManager()
+
+
+    def _str_(self):
+        return self.name
+
+    def get_final_price(self):
+        if self.discount_percentage > 0:
+            discount_amount = (self.price * self.discount_percentage) / 100
+            return float(self.price - discount_amount)
+        return float(self.price)
+
+class Category(models.Model):
+    Category_name = models.CharField(max_length=100)
+
+    def __str__(self):
+        return self.Category_name
+
+class MenuItem(models.Model):
+    name = models.CharField(max_length=100)
+    description = models.TextField(blank=True, null=True)
+    price = models.DecimalField(max_digits=8, decimal_places=2)
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='menu_items')
+    is_available = models.BooleanField(default=True)
+
+    def __str__(self)
+    return self.name
+
+class LoyaltyProgram(models.Model):
+    name = models.CharField(max_length=50, unique=True)
+    points_required = models.IntegerField(unique=True)
+    discount_percentage = models.DecimalField(max_digits=5, decimal_places=2)
+    description = models.TextField()
 
     def __str__(self):
         return self.name
 
-class MenuItem(models.Model):
+class Restaurant(models.Model):
     name = models.CharField(max_length=255)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=8, decimal_places=2)
-    category = models.ForeignKey(MenuCategory, on_delete=models.CASCADE)
-    is_available = models.BooleanField(default=True)
+    address = models.CharField(max_length=255)
 
-    is_featured = models.BooleanField(default=false)
+    operating_days = models.CharField(
+        max_length=100,
+        help_text="Comma-separated days (e.g., Mon,Tue,Wed,Thu,Fri,)"
+    )
 
-
-class Restaurant(models,Model):
-    name = models.CharField(max_length=255)
-    address = models.TextField()
-    phone = models.CharField(max_length=20)
-
-    has_delivery = models.BooleanField(default=False)
-
-class DailySpecial(models.Model):
-    name = models.CharField(max_length=100)
-    description = models.TextField()
-    price = models.DecimalField(max_digits=6,decimal_places=2)
-
-    @staticmethod 
-    def get_random_special():
-        specials = DailySpecial.objects.all()
-        if specials.exists():
-            return specials.order_by(?).first()
-        return None
-        
-def __str__(self):
+    def __str__(self):
         return self.name
+
+class ContactFormSubmission(models.Model):
+    name = models.CharField(max_length=100)
+    email = models.EmailField()
+    message = models.TextField()
+
+    def __str__(self):
+        return f"{self.name} - {self.email}"
