@@ -3,7 +3,7 @@ from django.db.models import Count
 from django.contrib.auth.models import User
 
 class UserReview(models.Model):
-    user= models.ForeignKey(user, on_delete=models.CASCADE, related_name='reviews')
+    user= models.ForeignKey(User, on_delete=models.CASCADE, related_name='reviews')
     rating = models.PositiveIntegerField()
     text = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
@@ -113,3 +113,14 @@ class ContactFormSubmission(models.Model):
 
     def __str__(self):
         return f"{self.name} - {self.email}"
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+    phone_number = models.CharField(max_length=20)
+
+class DailyOperatingHours(models.Model):
+    restaurant models.ForeignKey(Restaurant, related_name='operating_hours', on_delete=models.CASCADE)
+    day = models.CharField(max_length=20)
+    open_time = models.TimeField()
+    close_time = models.TimeField()
