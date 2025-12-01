@@ -7,11 +7,11 @@ from .views import ContactFormSubmission
 from rest_framework.routers import DefaultRouter
 from .views import MenuCategoryViewSet
 from .views import DailySpecialView
-from .views import CreateUserReviewView, MenuItemReviewListView
+from .views import UserReviewCreateView
+from .views import RestaurantDetailsView
 
 urlpatterns = [
-    path("api/reviews/create/", CreateUserReviewView.as_view(), name="create-review"),
-    path("api/reviews/menu-item/<int:menu_item_id>/", MenuItemReviewListView.as_view(), name="menu-item-reviews"),
+    path('restaurant/<int:pk>/', RestaurantDetailsView.as_view(), name='restaurant-detail'),
 ]
 
 router = DefaultRouter()
@@ -43,4 +43,7 @@ urlpatterns = [
 
 urlpatterns = [
     path('daily-specials/', DailySpecialView.as_view(), name='daily-specials')
+]
+urlpatterns = [
+    path('reviews/create/', UserReviewCreateView.as_view(), name='create-review')
 ]
