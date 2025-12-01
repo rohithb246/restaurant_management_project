@@ -16,7 +16,14 @@ from .serializer import UserReviewSerializer
 from .models import ContactFormSubmission
 from .serializers import ContactFormSubmissionSerializer
 from .serializers import DailySpecialSerializer
+from rest_framework.generics import RetrieveAPIView
+from .models import Restaurant
+from .serializer import RestaurantSerializer
 
+class RestaurantDetailView(RetrieveAPIView):
+    queryset = Restaurant.objects.all()
+    serializer_class = RestaurantSerializer
+    
 class DailySpecialSerializer(generics.ListAPIView):
     serializer_class = DailySpecialSerializer
 
