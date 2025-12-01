@@ -6,6 +6,7 @@ from django.db import models
 from .model import UserReview
 from .models import MenuItem
 from .models import MenuCategory
+from .model import Restaurant, DailyOperatingHours
 
 class UserReviewSerializer(serializers.ModelSerializer):
     class Meta:
