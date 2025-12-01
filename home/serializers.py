@@ -11,6 +11,7 @@ class UserReviewSerializer(serializers.ModelSerializer):
     class Meta:
         model = UserReview
         fiels = ['id', 'user', 'rating', 'text', 'created_at']
+
 class DailySpecialSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
@@ -46,3 +47,9 @@ class ContactFormSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = ContactFormSubmission
         fields = ['id', 'name', 'email', 'message']
+
+class DailyOperatingHoursSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = DailyOperatingHours
+        fields = ['day', 'open_time', 'close_time']
+        
