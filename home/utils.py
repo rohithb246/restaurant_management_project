@@ -82,3 +82,11 @@ def is_valid_Phone_number(phone_number: str) -> bool:
     pattern = r"^\+?\d[\d\s-]{8,14}\d$"
 
     return bool(re.match(pattern, phone_number))
+
+def is_valid_email(email: str) -> bool:
+    
+    if not isinstance(email, str):
+        return False
+        
+    email_regex = r"^[a-zA-Z0-9._%-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+    return re.match(email_regex, email) is not None
