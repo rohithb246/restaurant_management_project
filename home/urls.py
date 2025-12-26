@@ -47,3 +47,6 @@ urlpatterns = [
 urlpatterns = [
     path('reviews/create/', UserReviewCreateView.as_view(), name='create-review')
 ]
+urlpatterns = [
+    path('api/menu/search/', search_menu_items, name='menu-search'),
+]
