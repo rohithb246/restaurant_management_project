@@ -19,6 +19,20 @@ from .serializers import DailySpecialSerializer
 from rest_framework.generics import RetrieveAPIView
 from .models import Restaurant
 from .serializer import RestaurantSerializer
+from .models import MenuItem
+from .serializers import MenuItemSearchSerializer
+
+@api_view(['GET'])
+def search_menu_items(request):
+    query = request.GET.get('q','')
+
+    if query:
+        items = MenuItem.objects.filter(name_icontains=query)
+    else:
+        items = MenuItem.objects.none()
+    
+    serializer = MenuItemSearchSerializer(items, many=True)
+    response(serializer.data)
 
 class RestaurantDetailView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
