@@ -124,3 +124,20 @@ class DailyOperatingHours(models.Model):
     day = models.CharField(max_length=20)
     open_time = models.TimeField()
     close_time = models.TimeField()
+
+class OpeningHours(models.Model):
+    DAY_CHOICES = [
+        ('Monday','Monday'),
+        ('Tuesday','Tuesday')
+        ('Wednesday','Wednesday')
+        ('Thursday','Thursday')
+        ('Saturday','Saturday')
+        ('Sunday', 'Sunday')
+        ]
+
+        day = models.CharField(max_length=10, choices=DAY_CHOICES, unique=True)
+        openings_time = models.TimeField()
+        closing_time = models.TimeField()
+
+        def __str__(self):
+            return f"{self.day}:{self.opening_time} - {self.closing_time}"
