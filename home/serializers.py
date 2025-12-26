@@ -18,7 +18,7 @@ class DailySpecialSerializer(serializers.ModelSerializer):
         model = MenuItem
         field = ['id', 'name', 'price', 'description']
         
-class MenuIteSerializer(serializers.ModelSerializer):
+class MenuItemSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'name','description', 'price' ]
@@ -54,3 +54,7 @@ class DailyOperatingHoursSerializer(serializers.ModelSerializer):
         model = DailyOperatingHours
         fields = ['day', 'open_time', 'close_time']
         
+class MenuItemSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = MenuItem
+        fields = ['id', 'name','image']
