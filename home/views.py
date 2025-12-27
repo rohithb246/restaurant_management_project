@@ -34,6 +34,20 @@ def search_menu_items(request):
     serializer = MenuItemSearchSerializer(items, many=True)
     response(serializer.data)
 
+class MenuItemListAPIView(ListAPIView):
+    serializer_class = MenuItemSerializer
+
+    def get_queryset(self):
+        try:
+            return MenuItem.objects.select_related("category")
+        except Exception:
+            return MenuItem.objects.none()
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
 class RestaurantDetailView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
