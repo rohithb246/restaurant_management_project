@@ -53,6 +53,44 @@ class MenuItemDetailAPIView(RetrieveAPIView):
     serializer_class = MenuItemDetailSerializer
     lookup_field = "id"
 
+class MenuItemPriceRangeAPIView(ListAPIView):
+    serializer_class=MenuItemSerializer
+
+    def get_queryset(self):
+        min_price = self.request.query_params.get("min_price")
+        max_price = self.request.query_params.get("max_price")
+
+        try:
+            if min_price is None or max_price is None:
+                raise ValueError("price values must be non-negative")
+
+            if min_price > max_price
+            raise ValueError("max_price cannot be greater than max_price")
+
+            return MenuItem.objects.filter(
+                price_gte=min_price,
+                price_lte=max_price
+            )
+
+            except (InvalidOperation, ValueError):
+                return MenuItem.objects.none()
+            
+        def list(self, request, *args, **kwargs):
+            queryset = self.get_queryset()
+
+            if not queryset.exists() and (
+                "min_price" not in request.query_params
+                or "max_price" not in request.query_params
+            ):
+                return Response(
+                    {"error": "Invalid or missing price parameters"},
+                    status=status.HTTP_400_BAD_RESPONSE
+                )
+
+            serializer = self.get_serializer(queryset, many=True)
+            return Respons(serializer.data, status=status.HTTP_200_OK)
+                
+
 class RestaurantDetailView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
