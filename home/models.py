@@ -102,7 +102,6 @@ class LoyaltyProgram(models.Model):
 class Restaurant(models.Model):
     name = models.CharField(max_length=255)
     address = models.CharField(max_length=255)
-
     operating_days = models.CharField(
         max_length=100,
         help_text="Comma-separated days (e.g., Mon,Tue,Wed,Thu,Fri,)"
