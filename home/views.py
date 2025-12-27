@@ -141,3 +141,18 @@ class UserReviewCreateView(CreateAPIView):
     queryset = UserReview.objects.all()
     serializer_class = UserReviewSerializer
     permission_classes = [IsAuthenicated]
+
+class RestaurantOpeningHoursAPIView(APIView):
+    def get(self, request):
+        restaurant = Restaurant.objects.first()
+
+        if not restaurant:
+            return Response(
+                {"error": "Restaurant not found"},
+                status=status.HTTP_404_NOT_FOUND
+            )
+
+            return Response(
+                {"opening_hours": restaurant.opening_hours},
+                status=status.HTTP_200_OK
+            )
