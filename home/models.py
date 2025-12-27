@@ -141,3 +141,10 @@ class OpeningHours(models.Model):
 
         def __str__(self):
             return f"{self.day}:{self.opening_time} - {self.closing_time}"
+
+class Restaurant(models.Model):
+    name = models.CharField(max_length=255)
+    address = models.TextField()
+
+    def get_total_menu_items(self):
+        return self.menu_items.count()
