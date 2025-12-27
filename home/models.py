@@ -58,6 +58,11 @@ class MenuItem(models.Model):
     is_daily_special = models.BooleanField(default=False)
     discount_percentage = models.DecimalField(max_digits=5, decimal_places=2, default=0.00)
     objects = MenuItemManager()
+    category = models.ForeignKey(
+        MenuCategory,
+        on_delete=models.CASCADE,
+        related_name="menu_items"
+    )
 
 
     def _str_(self):
