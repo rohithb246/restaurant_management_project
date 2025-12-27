@@ -48,6 +48,11 @@ class MenuItemListAPIView(ListAPIView):
         serializer = self.get_serializer(queryset, many=True)
         return Response(serializer.data, status=status.HTTP_200_OK)
 
+class MenuItemDetailAPIView(RetrieveAPIView):
+    queryset = MenuItem.objects.select_related("category")
+    serializer_class = MenuItemDetailSerializer
+    lookup_field = "id"
+
 class RestaurantDetailView(RetrieveAPIView):
     queryset = Restaurant.objects.all()
     serializer_class = RestaurantSerializer
