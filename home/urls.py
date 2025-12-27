@@ -10,6 +10,15 @@ from .views import DailySpecialView
 from .views import UserReviewCreateView
 from .views import RestaurantDetailsView
 from .views import MenuItemListAPIView
+from .views import RestaurantOpeningHoursAPIView
+
+urlpatterns = [
+    path(
+        "api/restaurant/opening-hours/",
+        RestaurantOpeningHoursAPIView.as_view(),
+        name="restaurant-openings-hours"
+    )
+]
 
 urlpatterns = [
     path('restaurant/<int:pk>/', RestaurantDetailsView.as_view(), name='restaurant-detail'),
