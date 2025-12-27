@@ -61,5 +61,5 @@ urlpatterns = [
     path('api/menu/search/', search_menu_items, name='menu-search'),
 ]
 urlpatterns = [
-    path("api/menu-items/", MenuItemListAPIView.as_view(), name="menu_items"),
+    path("api/menu-items/<int:id>/", MenuItemListAPIView.as_view(), name="menu_items-details"),
 ]
