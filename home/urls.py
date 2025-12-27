@@ -9,6 +9,7 @@ from .views import MenuCategoryViewSet
 from .views import DailySpecialView
 from .views import UserReviewCreateView
 from .views import RestaurantDetailsView
+from .views import MenuItemListAPIView
 
 urlpatterns = [
     path('restaurant/<int:pk>/', RestaurantDetailsView.as_view(), name='restaurant-detail'),
@@ -49,4 +50,7 @@ urlpatterns = [
 ]
 urlpatterns = [
     path('api/menu/search/', search_menu_items, name='menu-search'),
+]
+urlpatterns = [
+    path("api/menu-items/", MenuItemListAPIView.as_view(), name="menu_items"),
 ]
