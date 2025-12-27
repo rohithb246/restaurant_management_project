@@ -11,6 +11,7 @@ from .views import UserReviewCreateView
 from .views import RestaurantDetailsView
 from .views import MenuItemListAPIView
 from .views import RestaurantOpeningHoursAPIView
+from .views import MenuItemPriceRangeAPIView
 
 urlpatterns = [
     path(
@@ -62,4 +63,7 @@ urlpatterns = [
 ]
 urlpatterns = [
     path("api/menu-items/<int:id>/", MenuItemListAPIView.as_view(), name="menu_items-details"),
+]
+urlpatterns = [
+    path("api/menu-items/price-range/", MenuItemPriceRangeAPIView.as_view(), name="menu-items-price-range"),
 ]
