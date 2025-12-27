@@ -58,3 +58,25 @@ class MenuItemSearchSerializer(serializers.ModelSerializer):
     class Meta:
         model = MenuItem
         fields = ['id', 'name','image']
+
+class MenuItemDetailSerializer(serializer.ModelSerializer):
+    category = serializer.StringRelatedField()
+    image = serializers.SerializerMethodField()
+
+    class Meta:
+        model = MenuItem
+        fields = [
+            "id",
+            "name",
+            "category",
+            "price",
+            "image",
+            "is_available",
+            "category",
+        ]
+
+    def get_image(self, obj):
+        request = self.content.get("request")
+        if obj.image and request:
+            return request.build_absolute.uri(obj.image.url)
+        return None
